@@ -1,6 +1,5 @@
-"use client";
+"use client"
 
-import React from "react";
 import {
   Select,
   SelectContent,
@@ -8,39 +7,47 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { formUrlQuery } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+} from "@/components/ui/select"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useCallback } from "react"
 
 interface Props {
+  filterParam: string
   filters: {
-    name: string;
-    value: string;
-  }[];
-  otherClasses?: string;
-  containerClasses?: string;
-  placeHolder?: string;
+    name: string
+    value: string
+  }[]
+  otherClasses?: string
+  containerClasses?: string
+  placeHolder?: string
 }
 
 const Filter = ({
+  filterParam,
   filters,
   otherClasses,
   containerClasses,
   placeHolder,
 }: Props) => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
 
-  const paramFilter = searchParams.get("filter");
+  const paramFilter = searchParams.get(filterParam)
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value)
+      return params.toString()
+    },
+    [searchParams]
+  )
 
   const handleUpdateParams = (value: string) => {
-    const newUrl = formUrlQuery({
-      params: searchParams.toString(),
-      key: "filter",
-      value: value.split(",").join(","),
-    });
-    router.push(newUrl, { scroll: false });
-  };
+    const queryString = createQueryString(filterParam, value)
+    router.push(pathname + "?" + queryString)
+  }
   return (
     <div className={`relative ${containerClasses} w-[400px]  lg:w-[200px]`}>
       <Select
@@ -65,7 +72,7 @@ const Filter = ({
         </SelectContent>
       </Select>
     </div>
-  );
-};
+  )
+}
 
-export default Filter;
+export default Filter
