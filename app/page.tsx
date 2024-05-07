@@ -1,19 +1,24 @@
-import Filter from "@/components/Filter";
-import LocalSearchbar from "@/components/LocalSearchbar";
-import Profile from "@/components/Profile";
+import Filter from "@/components/Filter"
+import LocalSearchbar from "@/components/LocalSearchbar"
+import Profile from "@/components/Profile"
 import {
   bathroomsOptions,
   bedroomsOptions,
   categoryOptions,
   seasonOptions,
-} from "@/constant";
-import { getHouses } from "@/lib/actions/houses.action";
+} from "@/constant"
+import { getHouses } from "@/lib/actions/houses.action"
 
 export default async function Home({ searchParams }: any) {
   const result = await getHouses({
     searchQuery: searchParams.q,
-    filter: searchParams.filter,
-  });
+    filter: {
+      category: searchParams.category,
+      season: searchParams.season,
+      minBedrooms: searchParams.bedrooms,
+      minBathrooms: searchParams.bathrooms,
+    },
+  })
 
   return (
     <main className="min-h-screen w-full p-24">
@@ -25,24 +30,28 @@ export default async function Home({ searchParams }: any) {
 
       <div className=" flex justify-center items-center p-1 gap-2 flex-wrap">
         <Filter
+          filterParam="category"
           filters={categoryOptions}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
           placeHolder="Category"
         />
 
         <Filter
+          filterParam="season"
           filters={seasonOptions}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
           placeHolder="Season"
         />
 
         <Filter
+          filterParam="bedrooms"
           filters={bedroomsOptions}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
           placeHolder="Bedrooms"
         />
 
         <Filter
+          filterParam="bathrooms"
           filters={bathroomsOptions}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
           placeHolder="Bathrooms"
@@ -73,5 +82,5 @@ export default async function Home({ searchParams }: any) {
         )}
       </div>
     </main>
-  );
+  )
 }
