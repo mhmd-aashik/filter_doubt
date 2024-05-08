@@ -1,6 +1,5 @@
-"use client";
+'use client';
 
-import React from "react";
 import {
   Select,
   SelectContent,
@@ -8,9 +7,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { formUrlQuery } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+} from '@/components/ui/select';
+import { formUrlQuery } from '@/lib/utils';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
   filters: {
@@ -20,6 +19,7 @@ interface Props {
   otherClasses?: string;
   containerClasses?: string;
   placeHolder?: string;
+  keyData: string;
 }
 
 const Filter = ({
@@ -27,17 +27,19 @@ const Filter = ({
   otherClasses,
   containerClasses,
   placeHolder,
+  keyData,
 }: Props) => {
+  console.log('key', keyData);
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const paramFilter = searchParams.get("filter");
+  const paramFilter = searchParams.get('filter');
 
   const handleUpdateParams = (value: string) => {
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
-      key: "filter",
-      value: value.split(",").join(","),
+      key: keyData,
+      value: value.split(',').join(','),
     });
     router.push(newUrl, { scroll: false });
   };
