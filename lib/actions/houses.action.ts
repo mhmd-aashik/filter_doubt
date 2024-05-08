@@ -1,39 +1,39 @@
-"use server";
+'use server';
 
-import House from "@/database/houses.model";
-import { connectToDatabase } from "../mongoose";
-import { FilterQuery } from "mongoose";
+import House from '@/database/houses.model';
+import { FilterQuery } from 'mongoose';
+import { connectToDatabase } from '../mongoose';
 
 interface GetHousesParams {
   page?: number;
   pageSize?: number;
   searchQuery?: string;
-  filter?: string;
+  category?: string;
+  season?: string;
+  bedrooms?: number;
+  bathrooms?: number;
 }
 
 export async function getHouses(params: GetHousesParams) {
   try {
     connectToDatabase();
 
-    const { searchQuery, filter } = params;
+    const { searchQuery, category, season, bathrooms, bedrooms } = params;
 
     const query: FilterQuery<typeof House> = {};
 
     if (searchQuery) {
-      query.$or = [{ name: { $regex: new RegExp(searchQuery, "i") } }];
+      query.$or = [{ name: { $regex: new RegExp(searchQuery, 'i') } }];
     }
+    if (category) query.category = { $regex: new RegExp(category, 'i') };
+    if (season) query.season = { $regex: new RegExp(season, 'i') };
+    if (bedrooms)
+      query.bedrooms = Number(bedrooms) ? Number(bedrooms) : { $gte: 5 };
+    if (bathrooms)
+      query.bathrooms = Number(bathrooms) ? Number(bathrooms) : { $gte: 5 };
 
-    // let sortOptions = {};
-
-    // switch (filter) {
-    //   case :
-    //     break;
-
-    //   default:
-    //     break;
-    // }
-
-    const houses = await House.find(query)
+    const houses = await House.find(query);
+    // console.log(houses[0]);
 
     return { houses };
   } catch (error) {

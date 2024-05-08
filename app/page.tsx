@@ -1,18 +1,22 @@
-import Filter from "@/components/Filter";
-import LocalSearchbar from "@/components/LocalSearchbar";
-import Profile from "@/components/Profile";
+import Filter from '@/components/Filter';
+import LocalSearchbar from '@/components/LocalSearchbar';
+import Profile from '@/components/Profile';
 import {
   bathroomsOptions,
   bedroomsOptions,
   categoryOptions,
   seasonOptions,
-} from "@/constant";
-import { getHouses } from "@/lib/actions/houses.action";
+} from '@/constant';
+import { getHouses } from '@/lib/actions/houses.action';
 
 export default async function Home({ searchParams }: any) {
+  // console.log(searchParams);
   const result = await getHouses({
     searchQuery: searchParams.q,
-    filter: searchParams.filter,
+    category: searchParams.category,
+    season: searchParams.season,
+    bedrooms: searchParams.bedrooms,
+    bathrooms: searchParams.bathrooms,
   });
 
   return (
@@ -28,24 +32,28 @@ export default async function Home({ searchParams }: any) {
           filters={categoryOptions}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
           placeHolder="Category"
+          keyData="category"
         />
 
         <Filter
           filters={seasonOptions}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
           placeHolder="Season"
+          keyData="season"
         />
 
         <Filter
           filters={bedroomsOptions}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
           placeHolder="Bedrooms"
+          keyData="bedrooms"
         />
 
         <Filter
           filters={bathroomsOptions}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
           placeHolder="Bathrooms"
+          keyData="bathrooms"
         />
       </div>
 
