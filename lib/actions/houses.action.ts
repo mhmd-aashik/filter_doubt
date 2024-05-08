@@ -32,18 +32,6 @@ export async function getHouses(params: GetHousesParams) {
     if (bathrooms)
       query.bathrooms = Number(bathrooms) ? Number(bathrooms) : { $gte: 5 };
 
-    // console.log(query);
-
-    // let sortOptions = {};
-
-    // switch (filter) {
-    //   case :
-    //     break;
-
-    //   default:
-    //     break;
-    // }
-
     const houses = await House.find(query);
     // console.log(houses[0]);
 
